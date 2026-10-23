@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Visual Browser Agent",
+  "version": "1.0.0",
+  "description": "A screenshot-driven AI browser assistant in Chrome's side panel.",
+  "minimum_chrome_version": "118",
+  "permissions": ["debugger", "sidePanel", "storage", "activeTab"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Open Visual Browser Agent"
+  }
+}

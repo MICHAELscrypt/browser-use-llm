@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Visual Browser Agent</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <div class="app-shell">
+
+    <section id="settingsPanel" class="settings-panel hidden" aria-label="Agent settings">
+      <div class="section-head"><strong>Connection settings</strong><button id="settingsClose" class="simple-icon" aria-label="Close settings">✕</button></div>
+      <label for="endpoint">OpenAI-compatible API base URL (needs to support /chat/completions)</label>
+      <input id="endpoint" type="url" spellcheck="false" placeholder="https://api.openai.com/v1" autocomplete="off">
+      <label for="model">Vision model</label>
+      <input id="model" type="text" placeholder="gpt-4o-mini" spellcheck="false" autocomplete="off">
+      <label for="apiKey">API key <span class="subdued">(optional for local models)</span></label>
+      <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off">
+      <div class="settings-two-col">
+        <div>
+          <label for="maxSteps">Maximum steps</label>
+          <select id="maxSteps">
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <label class="checkbox-setting"><input id="reviewClicks" type="checkbox"><span>Review every click</span></label>
+      </div>
+      <p class="help-text">Screenshots go to this endpoint on each step. Your API key is stored locally in this Chrome profile. Use a trusted endpoint and account.</p>
+      <button id="saveSettings" class="primary-button" type="button">Save settings and grant access</button>
+      <div id="settingsMessage" class="settings-message" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="target-bar" aria-label="Current target tab">
+      <span class="target-dot" aria-hidden="true"></span>
+      <div class="target-copy">
+        <span class="target-caption">Active browser tab</span>
+        <span class="target-title" id="tabTitle">Finding tab…</span>
+      </div>
+      <button id="refreshTab" class="simple-icon" title="Refresh tab label" aria-label="Refresh tab label">↻</button>
+      <button id="settingsToggle" class="icon-button" title="Settings" aria-label="Open settings">⚙</button>
+    </section>
+
+    <main id="conversation" class="conversation" aria-label="Chat conversation" aria-live="polite">
+      <div class="welcome" id="welcome">
+        <!--<div class="welcome-art" aria-hidden="true">✦</div>-->
+        <h1>Ask about the page.</h1>
+        <p>I'll navigate to sites, look at screenshots, click and type, and keep checking until I can answer or complete the task.</p>
+        <button type="button" class="suggestion" id="exampleQuery">Go to amazon.com and search for a blue mug <span>↗</span></button>
+      </div>
+      <div id="messages" class="messages"></div>
+    </main>
+
+    <section class="activity-zone" aria-label="Agent status">
+      <div class="status-line">
+        <span id="statusDot" class="status-dot"></span>
+        <span id="statusText">Ready to inspect a page</span>
+        <span id="stepCounter"></span>
+      </div>
+      <div id="approvalPanel" class="approval hidden">
+        <strong id="approvalTitle">Approve next click?</strong>
+        <p id="approvalDescription"></p>
+        <div class="approval-actions">
+          <button id="denyClick" class="ghost-button">Stop</button>
+          <button id="approveClick" class="primary-button">Approve click</button>
+        </div>
+      </div>
+      <details class="inspector">
+        <summary>Live screenshot &amp; activity <span class="chevron">⌄</span></summary>
+        <div class="inspector-body">
+          <div class="preview-wrap"><img id="screenshotPreview" alt="Most recent screenshot of the active tab" class="hidden"><span id="previewEmpty">No screenshot captured yet</span></div>
+          <ol id="activityLog" class="activity-log"></ol>
+        </div>
+      </details>
+    </section>
+
+    <form id="composer" class="composer">
+      <textarea id="prompt" rows="2" placeholder="Ask about this page or tell me where to go…" aria-label="Message" spellcheck="true"></textarea>
+      <div class="composer-actions">
+        <button id="clearChat" class="text-button" type="button" title="Clear this browser session's chat">Clear chat</button>
+        <span class="keyboard-hint">Enter to send</span>
+        <button id="stopButton" class="stop-button hidden" type="button">■ Stop</button>
+        <button id="sendButton" class="send-button" type="submit" aria-label="Send question">↑</button>
+      </div>
+    </form>
+  </div>
+  <script src="sidepanel.js" type="module"></script>
+</body>
+</html>
